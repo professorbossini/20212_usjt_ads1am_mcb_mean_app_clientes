@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { Cliente } from '../cliente.model';
 
 @Component({
     selector: 'app-cliente-inserir',
     templateUrl: './cliente-inserir.component.html',
     styleUrls: ['./cliente-inserir.component.css']
 })
-export class ClienteInserirComponent implements OnInit {
-    constructor() { }
+export class ClienteInserirComponent {
+  @Output() clienteAdicionado = new EventEmitter<Cliente>();
 
-    nome: string
-    fone: string
-    email: string
+    nome: string;
+    fone: string;
+    email: string;
+
     onAdicionarCliente(){
-        console.log('adicionado')
+      const cliente: Cliente = {
+        nome: this.nome,
+        fone: this.fone,
+        email: this.email,
+      };
+      this.clienteAdicionado.emit(cliente);
     }
 
-    ngOnInit() { }
+
 }
