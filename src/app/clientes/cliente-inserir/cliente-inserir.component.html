@@ -1,19 +1,24 @@
 <mat-card>
-  <h2>Cadastro de clientes</h2>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Digite o nome</mat-label>
-    <input matInput type="text" [(ngModel)]="nome">
-    <button *ngIf="nome" matSuffix mat-icon-button (click)="nome=''">
-      <mat-icon>close</mat-icon>
-    </button>
-
-  </mat-form-field>
-  <!-- [()]: banana box - caixa de banana -->
-
-  <input type="text" placeholder="Digite o telefone" [(ngModel)]="fone">
-
-  <input type="text" placeholder="Digite o e-mail" [(ngModel)]="email">
-
-  <button color="primary" mat-raised-button (click)="onAdicionarCliente()">Cadastrar cliente</button>
+  <form (submit)="onAdicionarCliente(clienteForm)" #clienteForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Digite o nome</mat-label>
+      <input matInput type="text" name="nome" ngModel required minlength="3">
+      <mat-error>Digite um nome válido</mat-error>
+    </mat-form-field>
+    <!-- [()]: banana box - caixa de banana -->
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Digite o fone</mat-label>
+      <input matInput type="text" name="fone" ngModel required>
+      <mat-error>Digite um telefone válido</mat-error>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Digite o e-mail</mat-label>
+      <input matInput type="text" name="email" ngModel required email>
+      <mat-error>Digite um e-mail válido</mat-error>
+    </mat-form-field>
+  
+    <button color="primary" mat-raised-button >Cadastrar cliente</button>
+  </form>
 </mat-card>

@@ -14,6 +14,7 @@ import { CabecalhoComponent } from './cabecalho/cabecalho.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ClienteListaComponent } from './clientes/cliente-lista/cliente-lista.component';
+import { ClienteService } from './clientes/cliente.service';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ClienteListaComponent } from './clientes/cliente-lista/cliente-lista.co
     MatToolbarModule,
     MatExpansionModule
   ],
+  // providers: [ClienteService],
   providers: [],
   bootstrap: [AppComponent]
 })
