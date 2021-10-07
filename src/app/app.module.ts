@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { ClienteInserirComponent } from './clientes/cliente-inserir/cliente-inserir.component';
@@ -32,7 +33,8 @@ import { ClienteService } from './clientes/cliente.service';
     MatInputModule,
     MatCardModule,
     MatToolbarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    HttpClientModule
   ],
   // providers: [ClienteService],
   providers: [],
