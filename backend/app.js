@@ -1,10 +1,8 @@
 const express = require('express');
+const cors = require ('cors')
 const app = express();
-
-// app.use((req, res, next) => {
-//   console.log ("a primeira requisição chegou");
-//   next();
-// });
+app.use(express.json())
+app.use(cors())
 
 const clientes = [
   {
@@ -21,10 +19,18 @@ const clientes = [
   }
 ]
 
-app.use('/api/clientes', (req, res, next) => {
+
+//GET localhost:3000/api/clientes
+app.get('/api/clientes', (req, res) => {
   res.status(200).json({
     mensagem: "DEU CERTOOO",
     clientes: clientes});
 });
 
+//POST localhost:3000/api/clientes
+app.post('/api/clientes', (req, res) => {
+  const cliente = req.body
+  console.log(cliente)
+  res.status(201).json({mensagem: 'Cliente inserido'})
+})
 module.exports = app;
