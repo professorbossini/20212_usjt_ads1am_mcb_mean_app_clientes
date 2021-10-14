@@ -8,8 +8,7 @@ import { ClienteService } from '../cliente.service';
   templateUrl: './cliente-lista.component.html',
   styleUrls: ['./cliente-lista.component.css']
 })
-export class ClienteListaComponent
-    implements OnInit, OnDestroy {
+export class ClienteListaComponent implements OnInit, OnDestroy {
   clientes: Cliente[] = [];
   private clientesSubscription: Subscription
 
@@ -34,6 +33,10 @@ export class ClienteListaComponent
 
   ngOnDestroy(): void{
     this.clientesSubscription.unsubscribe()
+  }
+
+  onDelete(id: string) {
+    this.clienteService.removerCliente(id);
   }
 
 }
