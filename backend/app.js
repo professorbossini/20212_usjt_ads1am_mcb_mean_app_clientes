@@ -48,14 +48,19 @@ app.post('/api/clientes', (req, res) => {
     email: req.body.email
   })
   cliente.save()
-  console.log(cliente)
-  res.status(201).json({mensagem: "Cliente inserido"})
+  .then(clienteInserido => {
+    console.log(cliente)
+    res.status(201).json({mensagem: "Cliente inserido", id: clienteInserido._id})
+  })
 })
 
 //DELETE localhost:3000/api/clientes/identificador do cliente a ser removido: na execução -> o parâmetro
 app.delete('/api/clientes/:id', (req, res, next) => {
-  console.log(req.params);
-  res.status(200).end();
+  Cliente.deleteOne({_id: req.params.id})
+  .then((resultado) => {
+    console.log(resultado)
+    res.status(200).end();
+  })
 })
 
 module.exports = app;
