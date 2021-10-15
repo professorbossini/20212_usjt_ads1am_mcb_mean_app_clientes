@@ -7,7 +7,9 @@ const routes: Routes = [
     //host:porta/
     {path: '', component: ClienteListaComponent},
     //host:porta/criar
-    {path: 'criar', component: ClienteInserirComponent}
+    {path: 'criar', component: ClienteInserirComponent},
+    //host:porta/editar/123456
+    {path: 'editar/:idCliente', component: ClienteInserirComponent}
 ]
 @NgModule({
     imports: [
