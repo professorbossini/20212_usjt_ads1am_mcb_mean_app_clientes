@@ -11,6 +11,8 @@ import { ClienteService } from '../cliente.service';
 export class ClienteListaComponent implements OnInit, OnDestroy {
   clientes: Cliente[] = [];
   private clientesSubscription: Subscription
+  public estaCarregando: boolean = false
+  
 
   // private clienteService: ClienteService;
   // constructor(clienteService: ClienteService){
@@ -22,11 +24,14 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+
+    this.estaCarregando = true
     //this.clientes = this.clienteService.getClientes()
     this.clienteService.getClientes();
     this.clientesSubscription = this.clienteService
     .getListaClientesAtualizadaObservable()
     .subscribe((clientes: Cliente[]) => {
+      this.estaCarregando = false
       this.clientes = clientes
     })
   }

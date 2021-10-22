@@ -1,21 +1,26 @@
 <mat-card>
-  <form (submit)="onSalvarCliente(clienteForm)" #clienteForm="ngForm">
+  <mat-spinner *ngIf="estaCarregando"></mat-spinner>
+  <form [formGroup]="form" (submit)="onSalvarCliente()"  *ngIf="!estaCarregando">
     <mat-form-field appearance="fill">
       <mat-label>Digite o nome</mat-label>
-      <input matInput type="text" name="nome" [ngModel]="cliente?.nome" required minlength="3">
+      <input matInput type="text" name="nome" required minlength="3" formControlName="nome">
       <mat-error>Digite um nome válido</mat-error>
     </mat-form-field>
     <!-- [()]: banana box - caixa de banana -->
 
+    <div>
+      <button mat-stroked-button (click)="selecionaArquivo.click()" type="button">Selecionar Imagem</button>
+      <input type="file" (change)="onImagemSelecionada($event)" #selecionaArquivo>
+    </div>
     <mat-form-field appearance="fill">
       <mat-label>Digite o fone</mat-label>
-      <input matInput type="text" name="fone" [ngModel]="cliente?.fone" required>
+      <input matInput type="text" name="fone" required formControlName="fone">
       <mat-error>Digite um telefone válido</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Digite o e-mail</mat-label>
-      <input matInput type="text" name="email" [ngModel]="cliente?.email" required email>
+      <input matInput type="text" name="email" formControlName="email">
       <mat-error>Digite um e-mail válido</mat-error>
     </mat-form-field>
 

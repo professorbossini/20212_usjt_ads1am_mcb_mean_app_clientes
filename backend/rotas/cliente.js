@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Cliente = require ('../models/cliente');
 
+
 //GET localhost:3000/api/clientes
 router.get('', (req, res, next) => {
   // res.status(200).json({
@@ -31,6 +32,7 @@ router.post('', (req, res) => {
 })
 
 //DELETE localhost:3000/api/clientes/identificador do cliente a ser removido: na execução -> o parâmetro
+//DELETE localhost:3000/api/clientes/1234546
 router.delete('/:id', (req, res, next) => {
   Cliente.deleteOne({_id: req.params.id})
   .then((resultado) => {

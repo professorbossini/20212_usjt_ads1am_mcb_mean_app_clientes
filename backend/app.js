@@ -12,20 +12,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGOD
 .then(() =>  console.log ("CONEXAO OK"))
 .catch (e => console.log ("CONEXAO NOK: " + e))
 
-const clientes = [
-  {
-    id: '1',
-    nome: 'Ana',
-    fone: '12345678',
-    email: 'ana@email.com'
-  },
-  {
-    id: '2',
-    nome: 'Gil',
-    fone: '87654321',
-    email: 'gil@email.com'
-  }
-]
 
+//http://localhost:3000/api/clientes
 app.use('/api/clientes', clienteRoutes);
 module.exports = app;

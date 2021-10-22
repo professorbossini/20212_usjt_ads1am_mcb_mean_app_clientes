@@ -3,13 +3,17 @@ import { Cliente } from "./cliente.model";
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class ClienteService{
     private clientes: Cliente[] = []
     private listaClientesAtualizada = new Subject <Cliente[]>();
 
-    constructor(private httpClient: HttpClient) {
+    constructor(
+      private httpClient: HttpClient,
+      private router: Router
+    ) {
 
     }
 
@@ -55,6 +59,7 @@ export class ClienteService{
         console.log(dados.mensagem)
         this.clientes.push(cliente)
         this.listaClientesAtualizada.next([...this.clientes])
+        this.router.navigate(['/'])
     })
   }
 
@@ -75,6 +80,7 @@ export class ClienteService{
       copia[indice] = cliente;
       this.clientes = copia;
       this.listaClientesAtualizada.next([...this.clientes]);
+      this.router.navigate(['/'])
     });
   }
 }
