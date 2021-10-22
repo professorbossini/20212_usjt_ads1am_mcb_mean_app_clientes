@@ -18,7 +18,10 @@ export class ClienteService{
     }
 
     getCliente (idCliente: string){
-      return {...this.clientes.find(cli => cli.id === idCliente)}
+      // return {...this.clientes.find(cli => cli.id === idCliente)}
+      return this.httpClient.get
+        <{_id: string, nome: string, fone: string, email: string}>
+        (`http://localhost:3000/api/clientes/${idCliente}`);
     }
 
     getClientes(): void {
@@ -62,4 +65,17 @@ export class ClienteService{
         this.listaClientesAtualizada.next([...this.clientes])
       })
   }
+
+  atualizarCliente(id: string, nome: string, fone: string, email: string) {
+    const cliente: Cliente = {id, nome, fone, email};
+    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
+    .subscribe(res => {
+      const copia = [...this.clientes];
+      const indice = copia.findIndex(cli => cli.id === cliente.id);
+      copia[indice] = cliente;
+      this.clientes = copia;
+      this.listaClientesAtualizada.next([...this.clientes]);
+    });
+  }
 }
+

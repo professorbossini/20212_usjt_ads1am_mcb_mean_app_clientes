@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require ('cors')
 const Cliente = require ('./models/cliente')
 const mongoose = require ('mongoose')
+const clienteRoutes = require ('./rotas/cliente');
 const app = express();
 app.use(express.json())
 app.use(cors())
@@ -26,41 +27,5 @@ const clientes = [
   }
 ]
 
-//GET localhost:3000/api/clientes
-app.get('/api/clientes', (req, res, next) => {
-  // res.status(200).json({
-  //   mensagem: "DEU CERTOOO",
-  //   clientes: clientes});
-  Cliente.find().then(documents => {
-    console.log(documents)
-    res.status(200).json({
-      mensagem: "Tudo certo",
-      clientes: documents
-    });
-  });
-});
-
-//POST localhost:3000/api/clientes
-app.post('/api/clientes', (req, res) => {
-  const cliente = new Cliente({
-    nome: req.body.nome,
-    fone: req.body.fone,
-    email: req.body.email
-  })
-  cliente.save()
-  .then(clienteInserido => {
-    console.log(cliente)
-    res.status(201).json({mensagem: "Cliente inserido", id: clienteInserido._id})
-  })
-})
-
-//DELETE localhost:3000/api/clientes/identificador do cliente a ser removido: na execução -> o parâmetro
-app.delete('/api/clientes/:id', (req, res, next) => {
-  Cliente.deleteOne({_id: req.params.id})
-  .then((resultado) => {
-    console.log(resultado)
-    res.status(200).end();
-  })
-})
-
+app.use('/api/clientes', clienteRoutes);
 module.exports = app;
