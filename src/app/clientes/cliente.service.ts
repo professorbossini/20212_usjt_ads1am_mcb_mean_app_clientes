@@ -37,7 +37,8 @@ export class ClienteService{
               id: cliente._id,
               nome: cliente.nome,
               fone: cliente.fone,
-              email: cliente.email
+              email: cliente.email,
+              imagemURL: cliente.imagemURL
             }
           })
         }))
@@ -47,15 +48,28 @@ export class ClienteService{
         })
     }
 
-  adicionarCliente (nome: string, fone: string, email: string) {
-    const cliente: Cliente = {
-        nome,
-        fone,
-        email
-    }
-    this.httpClient.post<{mensagem: string, id: string}>('http://localhost:3000/api/clientes', cliente)
+  adicionarCliente (nome: string, fone: string, email: string, imagem: File) {
+    // const cliente: Cliente = {
+    //     nome,
+    //     fone,
+    //     email
+    // }
+    const dadosCliente = new FormData()
+    dadosCliente.append('nome', nome)
+    dadosCliente.append('fone', fone)
+    dadosCliente.append('email', email)
+    dadosCliente.append('imagem', imagem)
+
+    this.httpClient.post<{mensagem: string, cliente: Cliente}>('http://localhost:3000/api/clientes', dadosCliente)
     .subscribe((dados) => {
-        cliente.id = dados.id
+        // cliente.id = dados.id
+        const cliente: Cliente = {
+          id: dados.cliente.id,
+          nome: nome,
+          fone: fone,
+          email: email,
+          imagemURL: dados.cliente.imagemURL
+        }
         console.log(dados.mensagem)
         this.clientes.push(cliente)
         this.listaClientesAtualizada.next([...this.clientes])

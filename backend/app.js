@@ -1,4 +1,5 @@
 require('dotenv').config()
+const path = require('path')
 const express = require('express');
 const cors = require ('cors')
 const Cliente = require ('./models/cliente')
@@ -12,6 +13,7 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGOD
 .then(() =>  console.log ("CONEXAO OK"))
 .catch (e => console.log ("CONEXAO NOK: " + e))
 
+app.use('/imagens', express.static(path.join('backend/imagens')))
 
 //http://localhost:3000/api/clientes
 app.use('/api/clientes', clienteRoutes);

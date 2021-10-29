@@ -12,6 +12,10 @@
       <button mat-stroked-button (click)="selecionaArquivo.click()" type="button">Selecionar Imagem</button>
       <input type="file" (change)="onImagemSelecionada($event)" #selecionaArquivo>
     </div>
+    <div class="imagem-preview">
+      <img [src]="previewImagem" [alt]="form.value.nome" 
+        *ngIf="previewImagem && previewImagem !== '' && form.get('imagem').valid">
+    </div>
     <mat-form-field appearance="fill">
       <mat-label>Digite o fone</mat-label>
       <input matInput type="text" name="fone" required formControlName="fone">
