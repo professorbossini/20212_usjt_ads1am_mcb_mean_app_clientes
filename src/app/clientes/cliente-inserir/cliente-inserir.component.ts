@@ -56,12 +56,14 @@ export class ClienteInserirComponent implements OnInit {
             id: dadosCliente._id,
             nome: dadosCliente.nome,
             fone: dadosCliente.fone,
-            email: dadosCliente.email
+            email: dadosCliente.email,
+            imagemURL: dadosCliente.imagemURL
           };
           this.form.setValue({
             nome: this.cliente.nome,
             fone: this.cliente.fone,
-            email: this.cliente.email
+            email: this.cliente.email,
+            imagem: this.cliente.imagemURL
           })
         });
       }
@@ -87,7 +89,8 @@ export class ClienteInserirComponent implements OnInit {
         this.idCliente,
         this.form.value.nome,
         this.form.value.fone,
-        this.form.value.email
+        this.form.value.email,
+        this.form.value.imagem
       )
     }
     this.form.reset();
@@ -98,7 +101,7 @@ export class ClienteInserirComponent implements OnInit {
     this.form.patchValue({'imagem': arquivo})
     this.form.get('imagem').updateValueAndValidity()
     const reader = new FileReader()
-    
+
     reader.onload = () => {
       this.previewImagem = reader.result  as string
     }

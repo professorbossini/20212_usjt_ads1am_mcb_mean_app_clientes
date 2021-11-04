@@ -24,7 +24,7 @@ export class ClienteService{
     getCliente (idCliente: string){
       // return {...this.clientes.find(cli => cli.id === idCliente)}
       return this.httpClient.get
-        <{_id: string, nome: string, fone: string, email: string}>
+        <{_id: string, nome: string, fone: string, email: string, imagemURL: string}>
         (`http://localhost:3000/api/clientes/${idCliente}`);
     }
 
@@ -85,12 +85,39 @@ export class ClienteService{
       })
   }
 
-  atualizarCliente(id: string, nome: string, fone: string, email: string) {
-    const cliente: Cliente = {id, nome, fone, email};
-    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, cliente)
+  atualizarCliente(id: string, nome: string, fone: string, email: string, imagem: File | string) {
+    //const cliente: Cliente = {id, nome, fone, email};
+    let clienteData: Cliente | FormData;
+    if (typeof(imagem) === 'object') {//nesse caso é um arquivo
+      clienteData = new FormData();
+      clienteData.append('id', id);
+      clienteData.append('nome', nome);
+      clienteData.append('fone', fone);
+      clienteData.append('email', email);
+      clienteData.append('imagem', imagem, nome) //nome é do arquivo
+    }
+    else {
+      //bom e velho obj JSON
+      clienteData = {
+        id: id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: imagem
+      }
+    }
+    console.log(typeof(clienteData));
+    this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, clienteData)
     .subscribe(res => {
       const copia = [...this.clientes];
-      const indice = copia.findIndex(cli => cli.id === cliente.id);
+      const indice = copia.findIndex(cli => cli.id === id);
+      const cliente = {
+        id: id,
+        nome: nome,
+        fone: fone,
+        email: email,
+        imagemURL: ""
+      }
       copia[indice] = cliente;
       this.clientes = copia;
       this.listaClientesAtualizada.next([...this.clientes]);
