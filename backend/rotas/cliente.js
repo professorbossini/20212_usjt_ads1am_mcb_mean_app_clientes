@@ -25,14 +25,29 @@ const armazenamento = multer.diskStorage({
 
 //GET localhost:3000/api/clientes
 router.get('', (req, res, next) => {
-  // res.status(200).json({
-  //   mensagem: "DEU CERTOOO",
-  //   clientes: clientes});
-  Cliente.find().then(documents => {
-    console.log(documents)
+  //suponha que há um objeto chamado pagesize em req.query
+  //atribua o seu valor a uma constante chamada pagesize
+  const pagesize = +req.query.pagesize
+  const page = +req.query.page
+
+  const consulta = Cliente.find()
+  let clientesEncontrados
+
+  if (pagesize && page){
+    consulta
+    .skip(pagesize * (page - 1))
+    .limit(pagesize)
+  }
+  consulta
+  .then(documents => {
+    clientesEncontrados = documents
+    return Cliente.count()
+  })
+  .then(count => {
     res.status(200).json({
       mensagem: "Tudo certo",
-      clientes: documents
+      clientes: clientesEncontrados,
+      maxClientes: count
     });
   });
 });

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Cliente } from '../cliente.model';
 import { ClienteService } from '../cliente.service';
+import { PageEvent } from '@angular/material/paginator'
 
 @Component({
   selector: 'app-cliente-lista',
@@ -12,7 +13,10 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
   clientes: Cliente[] = [];
   private clientesSubscription: Subscription
   public estaCarregando: boolean = false
-  
+  public totalDeClientes: number = 10
+  public totalDeClientesPorPagina: number = 2
+  public opcoesTotalDeClientesPorPagina: number[] = [2, 3, 5, 10]
+  public paginaAtual: number = 1
 
   // private clienteService: ClienteService;
   // constructor(clienteService: ClienteService){
@@ -27,12 +31,13 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
 
     this.estaCarregando = true
     //this.clientes = this.clienteService.getClientes()
-    this.clienteService.getClientes();
+    this.clienteService.getClientes(this.totalDeClientesPorPagina, this.paginaAtual);
     this.clientesSubscription = this.clienteService
     .getListaClientesAtualizadaObservable()
-    .subscribe((clientes: Cliente[]) => {
+    .subscribe((dados: {clientes: [], maxClientes: number}) => {
       this.estaCarregando = false
-      this.clientes = clientes
+      this.clientes = dados.clientes
+      this.totalDeClientes = dados.maxClientes
     })
   }
 
@@ -41,7 +46,18 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: string) {
-    this.clienteService.removerCliente(id);
+    this.estaCarregando = true
+    this.clienteService.removerCliente(id)
+    .subscribe(() => {
+      this.clienteService.getClientes(this.totalDeClientesPorPagina, this.paginaAtual)
+    })
+  }
+
+  onPaginaAlterada (dadosPagina: PageEvent){
+    this.estaCarregando = true
+    this.paginaAtual = dadosPagina.pageIndex + 1
+    this.totalDeClientesPorPagina = dadosPagina.pageSize
+    this.clienteService.getClientes(this.totalDeClientesPorPagina, this.paginaAtual);
   }
 
 }

@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 @Injectable({providedIn: 'root'})
 export class ClienteService{
     private clientes: Cliente[] = []
-    private listaClientesAtualizada = new Subject <Cliente[]>();
+    private listaClientesAtualizada = new Subject <{clientes: Cliente[], maxClientes: number}>();
 
     constructor(
       private httpClient: HttpClient,
@@ -28,23 +28,30 @@ export class ClienteService{
         (`http://localhost:3000/api/clientes/${idCliente}`);
     }
 
-    getClientes(): void {
+    getClientes(pagesize: number, page: number): void {
+      const parametros = `?pagesize=${pagesize}&page=${page}`
       this.httpClient.get<{mensagem: string,
-        clientes: any}>('http://localhost:3000/api/clientes')
+        clientes: any, maxClientes: number}>('http://localhost:3000/api/clientes' + parametros)
         .pipe(map((dados) => {
-          return dados.clientes.map (cliente =>{
-            return {
-              id: cliente._id,
-              nome: cliente.nome,
-              fone: cliente.fone,
-              email: cliente.email,
-              imagemURL: cliente.imagemURL
-            }
-          })
+          return {
+            clientes: dados.clientes.map (cliente =>{
+              return {
+                id: cliente._id,
+                nome: cliente.nome,
+                fone: cliente.fone,
+                email: cliente.email,
+                imagemURL: cliente.imagemURL
+              }
+            }),
+            maxClientes: dados.maxClientes
+          }
         }))
-        .subscribe((clientes) => {
-          this.clientes = clientes;
-          this.listaClientesAtualizada.next([...this.clientes]);
+        .subscribe((dados) => {
+          this.clientes = dados.clientes;
+          this.listaClientesAtualizada.next({
+            clientes: [...this.clientes],
+            maxClientes: dados.maxClientes
+          });
         })
     }
 
@@ -61,28 +68,12 @@ export class ClienteService{
     dadosCliente.append('imagem', imagem)
 
     this.httpClient.post<{mensagem: string, cliente: Cliente}>('http://localhost:3000/api/clientes', dadosCliente)
-    .subscribe((dados) => {
-        // cliente.id = dados.id
-        const cliente: Cliente = {
-          id: dados.cliente.id,
-          nome: nome,
-          fone: fone,
-          email: email,
-          imagemURL: dados.cliente.imagemURL
-        }
-        console.log(dados.mensagem)
-        this.clientes.push(cliente)
-        this.listaClientesAtualizada.next([...this.clientes])
-        this.router.navigate(['/'])
-    })
+    .subscribe((res) => this.router.navigate(['/']))
   }
 
-  removerCliente (id: string): void {
-    this.httpClient.delete(`http://localhost:3000/api/clientes/${id}`)
-      .subscribe(() => {
-        this.clientes = this.clientes.filter (cli => cli.id !== id)
-        this.listaClientesAtualizada.next([...this.clientes])
-      })
+  removerCliente (id: string) {
+    return this.httpClient.delete(`http://localhost:3000/api/clientes/${id}`)
+    
   }
 
   atualizarCliente(id: string, nome: string, fone: string, email: string, imagem: File | string) {
@@ -108,21 +99,8 @@ export class ClienteService{
     }
     console.log(typeof(clienteData));
     this.httpClient.put(`http://localhost:3000/api/clientes/${id}`, clienteData)
-    .subscribe(res => {
-      const copia = [...this.clientes];
-      const indice = copia.findIndex(cli => cli.id === id);
-      const cliente = {
-        id: id,
-        nome: nome,
-        fone: fone,
-        email: email,
-        imagemURL: ""
-      }
-      copia[indice] = cliente;
-      this.clientes = copia;
-      this.listaClientesAtualizada.next([...this.clientes]);
-      this.router.navigate(['/'])
-    });
+    .subscribe( () => this.router.navigate(['/']));
+    // .subscribe( _  => this.router.navigate(['/']));
   }
 }
 
