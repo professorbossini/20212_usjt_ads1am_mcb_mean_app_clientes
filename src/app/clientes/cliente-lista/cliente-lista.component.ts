@@ -13,7 +13,7 @@ export class ClienteListaComponent implements OnInit, OnDestroy {
   clientes: Cliente[] = [];
   private clientesSubscription: Subscription
   public estaCarregando: boolean = false
-  public totalDeClientes: number = 10
+  public totalDeClientes: number = 0
   public totalDeClientesPorPagina: number = 2
   public opcoesTotalDeClientesPorPagina: number[] = [2, 3, 5, 10]
   public paginaAtual: number = 1

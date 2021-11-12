@@ -5,7 +5,7 @@ const cors = require ('cors')
 const Cliente = require ('./models/cliente')
 const mongoose = require ('mongoose')
 const clienteRoutes = require ('./rotas/cliente');
-const usuariosRoutes = require ('/rotas/usuario');
+const usuariosRoutes = require ('./rotas/usuario');
 const app = express();
 app.use(express.json())
 app.use(cors())
@@ -17,6 +17,6 @@ mongoose.connect(`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGOD
 app.use('/imagens', express.static(path.join('backend/imagens')))
 
 app.use('/api/clientes', clienteRoutes);
-app.use('.api/usuarios', usuariosRoutes);
+app.use('/api/usuarios', usuariosRoutes);
 
 module.exports = app;
